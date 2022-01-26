@@ -38,8 +38,8 @@ initialization and an `afterEach` hook to finish the happo session.
 ```js
 const happoPlaywright = require('happo-playwright');
 
-test.beforeEach(async ({ page }) => {
-  await happoPlaywright.init(page);
+test.beforeEach(async ({ context }) => {
+  await happoPlaywright.init(context);
 });
 
 test.afterEach(async () => {
