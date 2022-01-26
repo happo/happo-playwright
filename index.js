@@ -4,9 +4,9 @@ const pathToBrowserBuild = require.resolve('happo-e2e/browser.build.js');
 const controller = new Controller();
 
 module.exports = {
-  async init(context) {
-    await context.addInitScript({ path: pathToBrowserBuild });
-    await context.addInitScript(`
+  async init(contextOrPage) {
+    await contextOrPage.addInitScript({ path: pathToBrowserBuild });
+    await contextOrPage.addInitScript(`
       window.addEventListener('load', () => {
         window.happoTakeDOMSnapshot.init(window);
       });
