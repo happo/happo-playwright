@@ -19,6 +19,9 @@ module.exports = {
   },
 
   async screenshot(page, handleOrLocator, { component, variant }) {
+    if (!controller.isActive()) {
+      return;
+    }
     if (!component) {
       throw new Error('Missing `component`');
     }
