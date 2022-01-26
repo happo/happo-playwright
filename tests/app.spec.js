@@ -1,8 +1,8 @@
 const { test, expect } = require('@playwright/test');
 const happoPlaywright = require('../');
 
-test.beforeEach(async ({ page }) => {
-  await happoPlaywright.init(page);
+test.beforeEach(async ({ context }) => {
+  await happoPlaywright.init(context);
 });
 
 test.afterEach(async () => {

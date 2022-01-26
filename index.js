@@ -1,17 +1,16 @@
 const Controller = require('happo-e2e/controller');
+const pathToBrowserBuild = require.resolve('happo-e2e/browser.build.js');
 
 const controller = new Controller();
 
 module.exports = {
-  async init(page) {
-    await page.addInitScript({
-      path: './node_modules/happo-e2e/browser.build.js',
-    });
-    await page.evaluate(() => {
+  async init(contextOrPage) {
+    await contextOrPage.addInitScript({ path: pathToBrowserBuild });
+    await contextOrPage.addInitScript(`
       window.addEventListener('load', () => {
         window.happoTakeDOMSnapshot.init(window);
       });
-    });
+    `);
     await controller.init();
   },
 
@@ -20,6 +19,9 @@ module.exports = {
   },
 
   async screenshot(page, handleOrLocator, { component, variant }) {
+    if (!controller.isActive()) {
+      return;
+    }
     if (!component) {
       throw new Error('Missing `component`');
     }
