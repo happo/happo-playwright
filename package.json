@@ -1,6 +1,6 @@
 {
   "name": "happo-playwright",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Happo integration for Playwright end-to-end tests",
   "main": "index.js",
   "repository": "git@github.com:happo/happo-e2e.git",
