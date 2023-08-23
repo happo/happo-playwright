@@ -18,7 +18,7 @@ module.exports = {
     await controller.finish();
   },
 
-  async screenshot(page, handleOrLocator, { component, variant }) {
+  async screenshot(page, handleOrLocator, { component, variant, ...rest }) {
     if (!controller.isActive()) {
       return;
     }
@@ -36,6 +36,11 @@ module.exports = {
         window.happoTakeDOMSnapshot({ doc: element.ownerDocument, element }),
       elementHandle,
     );
-    await controller.registerSnapshot({ ...snapshot, component, variant });
+    await controller.registerSnapshot({
+      ...snapshot,
+      component,
+      variant,
+      ...rest,
+    });
   },
 };
