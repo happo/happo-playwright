@@ -17,6 +17,10 @@ test('basic test', async ({ page }) => {
   await happoPlaywright.screenshot(page, title, {
     component: 'Title',
     variant: 'default',
+    targets: [
+      'chrome',
+      { name: 'firefox-small', browser: 'firefox', viewport: '400x800' },
+    ],
   });
 
   await page.click('text=goodbye');
