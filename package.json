@@ -8,10 +8,17 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint .",
-    "dev": "next --port 7676"
+    "dev": "next --port 7676",
+    "test": "happo-e2e -- playwright test"
+  },
+  "prettier": {
+    "printWidth": 85,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "arrowParens": "always"
   },
   "devDependencies": {
-    "@playwright/test": "^1.16.3",
+    "@playwright/test": "^1.46.0",
     "eslint": "^8.2.0",
     "happo-e2e": "^2.0.1",
     "happo.io": "^6.8.0",
