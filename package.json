@@ -8,7 +8,8 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint .",
-    "dev": "next --port 7676"
+    "dev": "next --port 7676",
+    "test": "happo-e2e -- playwright test"
   },
   "devDependencies": {
     "@playwright/test": "^1.16.3",
