@@ -22,17 +22,24 @@ module.exports = {
     if (!controller.isActive()) {
       return;
     }
+
     if (!component) {
       throw new Error('Missing `component`');
     }
     if (!variant) {
       throw new Error('Missing `variant`');
     }
+    if (handleOrLocator instanceof Promise) {
+      throw new Error(
+        'handleOrLocator must be an element handle or a locator, received a promise. Please use `await` to resolve the handleOrLocator.',
+      );
+    }
+
     const elementHandle = handleOrLocator.elementHandle
       ? await handleOrLocator.elementHandle()
       : handleOrLocator;
     const snapshot = await page.evaluate(
-      element =>
+      (element) =>
         window.happoTakeDOMSnapshot({ doc: element.ownerDocument, element }),
       elementHandle,
     );

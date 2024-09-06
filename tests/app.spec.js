@@ -31,4 +31,49 @@ test('basic test', async ({ page }) => {
     component: 'Title',
     variant: 'goodbye',
   });
+
+  {
+    // We expect an error about using a promise as handleOrLocator
+    let caughtError;
+    try {
+      await happoPlaywright.screenshot(page, page.$('h2'), {
+        component: 'Title',
+        variant: 'goodbye without await',
+      });
+    } catch (error) {
+      caughtError = error;
+    }
+    expect(caughtError).toBeDefined();
+    expect(caughtError.message).toContain(
+      'handleOrLocator must be an element handle or a locator, received a promise',
+    );
+  }
+
+  {
+    // We expect an error about missing component
+    let caughtError;
+    try {
+      await happoPlaywright.screenshot(page, await page.$('h2'), {
+        variant: 'goodbye without await',
+      });
+    } catch (error) {
+      caughtError = error;
+    }
+    expect(caughtError).toBeDefined();
+    expect(caughtError.message).toContain('Missing `component`');
+  }
+
+  {
+    // We expect an error about missing variant
+    let caughtError;
+    try {
+      await happoPlaywright.screenshot(page, await page.$('h2'), {
+        component: 'Title',
+      });
+    } catch (error) {
+      caughtError = error;
+    }
+    expect(caughtError).toBeDefined();
+    expect(caughtError.message).toContain('Missing `variant`');
+  }
 });
