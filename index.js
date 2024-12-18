@@ -6,11 +6,6 @@ const controller = new Controller();
 module.exports = {
   async init(contextOrPage) {
     await contextOrPage.addInitScript({ path: pathToBrowserBuild });
-    await contextOrPage.addInitScript(`
-      window.addEventListener('load', () => {
-        window.happoTakeDOMSnapshot.init(window);
-      });
-    `);
     await controller.init();
   },
 
