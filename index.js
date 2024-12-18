@@ -3,9 +3,31 @@ const pathToBrowserBuild = require.resolve('happo-e2e/browser.build.js');
 
 const controller = new Controller();
 
+async function lazyLoadBrowserBundle(page) {
+  if (
+    await page.evaluate(() => typeof window.happoTakeDOMSnapshot === 'undefined')
+  ) {
+    await page.addScriptTag({ path: pathToBrowserBuild });
+
+    // Add timeout check for happoTakeDOMSnapshot
+    try {
+      await page.waitForFunction(
+        () => typeof window.happoTakeDOMSnapshot !== 'undefined',
+        { timeout: 10000 },
+      );
+    } catch (error) {
+      throw new Error('Timed out waiting for happoTakeDOMSnapshot to be defined');
+    }
+  }
+}
+
 module.exports = {
-  async init(contextOrPage) {
-    await contextOrPage.addInitScript({ path: pathToBrowserBuild });
+  async init(pageOrContext) {
+    if (pageOrContext) {
+      console.warn(
+        '[HAPPO] You no longer need to pass a page or context to happoPlaywright.init()',
+      );
+    }
     await controller.init();
   },
 
@@ -29,6 +51,8 @@ module.exports = {
         'handleOrLocator must be an element handle or a locator, received a promise. Please use `await` to resolve the handleOrLocator.',
       );
     }
+
+    await lazyLoadBrowserBundle(page);
 
     const elementHandle = handleOrLocator.elementHandle
       ? await handleOrLocator.elementHandle()
