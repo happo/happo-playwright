@@ -23,6 +23,20 @@ test('basic test', async ({ page }) => {
     ],
   });
 
+  const stretchToParent = page.locator('#stretch-to-parent');
+
+  await happoPlaywright.screenshot(page, stretchToParent, {
+    component: 'StretchToParent',
+    variant: 'snapshotStrategy hoist',
+    snapshotStrategy: 'hoist',
+  });
+
+  await happoPlaywright.screenshot(page, stretchToParent, {
+    component: 'StretchToParent',
+    variant: 'snapshotStrategy hoist',
+    snapshotStrategy: 'clip',
+  });
+
   await page.click('text=goodbye');
 
   await expect(page.locator('text=Sad to see you go').first()).toBeVisible();
