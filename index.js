@@ -35,7 +35,11 @@ module.exports = {
     await controller.finish();
   },
 
-  async screenshot(page, handleOrLocator, { component, variant, ...rest }) {
+  async screenshot(
+    page,
+    handleOrLocator,
+    { component, variant, snapshotStrategy = 'hoist', ...rest },
+  ) {
     if (!controller.isActive()) {
       return;
     }
@@ -57,11 +61,20 @@ module.exports = {
     const elementHandle = handleOrLocator.elementHandle
       ? await handleOrLocator.elementHandle()
       : handleOrLocator;
+
     const snapshot = await page.evaluate(
-      (element) =>
-        window.happoTakeDOMSnapshot({ doc: element.ownerDocument, element }),
-      elementHandle,
+      ({ element, strategy }) =>
+        window.happoTakeDOMSnapshot({
+          doc: element.ownerDocument,
+          element,
+          strategy,
+        }),
+      {
+        element: elementHandle,
+        strategy: snapshotStrategy,
+      },
     );
+
     await controller.registerSnapshot({
       ...snapshot,
       component,
