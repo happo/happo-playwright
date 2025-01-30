@@ -1,5 +1,13 @@
-const { test, expect } = require('@playwright/test');
-const happoPlaywright = require('../');
+import { test, expect } from '@playwright/test';
+import * as happoPlaywright from '..';
+
+function assertError(error: unknown): asserts error is Error {
+  if (!(error instanceof Error)) {
+    throw new Error(
+      `Expected an error, got ${typeof error}: ${JSON.stringify(error)}`,
+    );
+  }
+}
 
 test.beforeAll(async () => {
   await happoPlaywright.init();
@@ -10,6 +18,9 @@ test.afterAll(async () => {
 });
 
 test('basic test', async ({ page }) => {
+  expect(process.env.HAPPO_API_KEY).toBeDefined();
+  expect(process.env.HAPPO_API_SECRET).toBeDefined();
+
   await page.goto('http://localhost:7676');
 
   const title = page.locator('h1');
@@ -49,15 +60,26 @@ test('basic test', async ({ page }) => {
   {
     // We expect an error about using a promise as handleOrLocator
     let caughtError;
+
     try {
-      await happoPlaywright.screenshot(page, page.$('h2'), {
-        component: 'Title',
-        variant: 'goodbye without await',
-      });
+      await happoPlaywright.screenshot(
+        page,
+        // @ts-expect-error Argument of type 'Promise<ElementHandleForTag<"h2"> | null>' is not assignable to parameter of type 'ElementHandle<Node> | Locator | null'.ts(2345)
+        page.$('h2'),
+        {
+          component: 'Title',
+          variant: 'goodbye without await',
+        },
+      );
     } catch (error) {
+      assertError(error);
       caughtError = error;
     }
-    expect(caughtError).toBeDefined();
+
+    if (!caughtError) {
+      throw new Error('Expected an error');
+    }
+
     expect(caughtError.message).toContain(
       'handleOrLocator must be an element handle or a locator, received a promise',
     );
@@ -66,14 +88,25 @@ test('basic test', async ({ page }) => {
   {
     // We expect an error about missing component
     let caughtError;
+
     try {
-      await happoPlaywright.screenshot(page, await page.$('h2'), {
-        variant: 'goodbye without await',
-      });
+      await happoPlaywright.screenshot(
+        page,
+        await page.$('h2'),
+        // @ts-expect-error Property 'component' is missing in type '{ variant: string; }'
+        {
+          variant: 'goodbye without await',
+        },
+      );
     } catch (error) {
+      assertError(error);
       caughtError = error;
     }
-    expect(caughtError).toBeDefined();
+
+    if (!caughtError) {
+      throw new Error('Expected an error');
+    }
+
     expect(caughtError.message).toContain('Missing `component`');
   }
 
@@ -81,13 +114,23 @@ test('basic test', async ({ page }) => {
     // We expect an error about missing variant
     let caughtError;
     try {
-      await happoPlaywright.screenshot(page, await page.$('h2'), {
-        component: 'Title',
-      });
+      await happoPlaywright.screenshot(
+        page,
+        await page.$('h2'),
+        // @ts-expect-error Property 'variant' is missing in type '{ component: string; }'
+        {
+          component: 'Title',
+        },
+      );
     } catch (error) {
+      assertError(error);
       caughtError = error;
     }
-    expect(caughtError).toBeDefined();
+
+    if (!caughtError) {
+      throw new Error('Expected an error');
+    }
+
     expect(caughtError.message).toContain('Missing `variant`');
   }
 });

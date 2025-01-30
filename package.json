@@ -2,14 +2,16 @@
   "name": "happo-playwright",
   "version": "2.3.0",
   "description": "Happo integration for Playwright end-to-end tests",
-  "main": "index.js",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "repository": "git@github.com:happo/happo-e2e.git",
   "author": "Henric Trotzig <henric.trotzig@happo.io>",
   "license": "MIT",
   "scripts": {
     "lint": "eslint .",
     "dev": "next --port 7676",
-    "test": "happo-e2e -- playwright test"
+    "test": "happo-e2e -- playwright test",
+    "prepare": "npx tsc --noEmit false"
   },
   "prettier": {
     "printWidth": 85,
@@ -18,13 +20,20 @@
     "arrowParens": "always"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/js": "^9.19.0",
     "@playwright/test": "^1.46.0",
-    "eslint": "^8.2.0",
+    "@types/node": "^22.11.0",
+    "@types/react": "^17.0.0",
+    "eslint": "^9.19.0",
+    "globals": "^15.14.0",
     "happo-e2e": "^3.3.1",
     "happo.io": "^6.8.0",
-    "next": "^12.0.4",
+    "next": "^12.3.4",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.22.0"
   },
   "peerDependencies": {
     "happo-e2e": ">=1.4.2"
