@@ -1,9 +1,19 @@
 import React, { useEffect, useRef } from 'react';
 
-function CanvasImage({ responsive }) {
-  const ref = useRef();
+function CanvasImage({ responsive }: { responsive?: boolean }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
   useEffect(() => {
-    const ctx = ref.current.getContext('2d');
+    if (!canvasRef.current) {
+      return;
+    }
+
+    const ctx = canvasRef.current.getContext('2d');
+
+    if (!ctx) {
+      return;
+    }
+
     ctx.moveTo(0, 0);
     ctx.lineTo(200, 100);
     ctx.stroke();
@@ -20,7 +30,7 @@ function CanvasImage({ responsive }) {
         padding: 20,
         width: responsive ? 'calc(100% - 40px)' : undefined,
       }}
-      ref={ref}
+      ref={canvasRef}
       width={responsive ? undefined : '200'}
       height={responsive ? undefined : '100'}
     />

@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const { RemoteBrowserTarget } = require('happo.io');
 
 module.exports = {
