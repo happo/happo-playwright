@@ -134,3 +134,15 @@ test('basic test', async ({ page }) => {
     expect(caughtError.message).toContain('Missing `variant`');
   }
 });
+
+test('csp', async ({ page }) => {
+  await page.goto('http://localhost:7676/csp');
+
+  await expect(page.locator('h1')).toContainText('I block scripts');
+
+  await happoPlaywright.screenshot(page, page.locator('h1'), {
+    component: 'Title',
+    variant: 'csp',
+    cspNonce: 'foobar',
+  });
+});

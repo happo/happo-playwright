@@ -1,15 +1,35 @@
 import Controller from 'happo-e2e/controller';
 import type { Page, ElementHandle, Locator } from '@playwright/test';
-
+import fs from 'fs/promises';
 const pathToBrowserBuild = require.resolve('happo-e2e/browser.build.js');
 
 const controller = new Controller();
 
-async function lazyLoadBrowserBundle(page: Page) {
+async function lazyLoadBrowserBundle(page: Page, cspNonce?: string) {
   if (
     await page.evaluate(() => typeof window.happoTakeDOMSnapshot === 'undefined')
   ) {
-    await page.addScriptTag({ path: pathToBrowserBuild });
+    if (cspNonce) {
+      // We need to inject the browser bundle content into the page with the
+      // given nonce. Since `page.addScriptTag` doesn't support nonces, we need
+      // to do it manually.
+      const browserBundleContent = await fs.readFile(pathToBrowserBuild, 'utf8');
+      console.log('browserBundleContent', browserBundleContent.length);
+      await page.evaluate(
+        ({ content, nonce }: { content: string; nonce: string }) => {
+          const script = document.createElement('script');
+          script.textContent = content;
+          console.log('nonce', nonce);
+          console.log('content', content.length);
+          script.nonce = nonce;
+          document.head.appendChild(script);
+        },
+        { content: browserBundleContent, nonce: cspNonce },
+      );
+    } else {
+      // If there is no nonce, we can just use `page.addScriptTag` as usual.
+      await page.addScriptTag({ path: pathToBrowserBuild });
+    }
 
     // Add timeout check for happoTakeDOMSnapshot
     try {
@@ -43,11 +63,13 @@ export async function screenshot(
   {
     component,
     variant,
+    cspNonce,
     snapshotStrategy = 'hoist',
     ...rest
   }: {
     component: string;
     variant: string;
+    cspNonce?: string;
     snapshotStrategy?: 'hoist' | 'clip';
     [key: string]: unknown;
   },
@@ -73,7 +95,7 @@ export async function screenshot(
     throw new Error('Missing `variant`');
   }
 
-  await lazyLoadBrowserBundle(page);
+  await lazyLoadBrowserBundle(page, cspNonce);
 
   const elementHandle =
     'elementHandle' in handleOrLocator
