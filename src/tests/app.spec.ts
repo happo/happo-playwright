@@ -9,14 +9,6 @@ function assertError(error: unknown): asserts error is Error {
   }
 }
 
-test.beforeAll(async () => {
-  await happoPlaywright.init();
-});
-
-test.afterAll(async () => {
-  await happoPlaywright.finish();
-});
-
 test('basic test', async ({ page }) => {
   expect(process.env.HAPPO_API_KEY).toBeDefined();
   expect(process.env.HAPPO_API_SECRET).toBeDefined();
