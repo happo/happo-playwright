@@ -1,41 +1,22 @@
 import Controller from 'happo-e2e/controller';
 import type { Page, ElementHandle, Locator } from '@playwright/test';
+import { test } from '@playwright/test';
 
 const pathToBrowserBuild = require.resolve('happo-e2e/browser.build.js');
 
 const controller = new Controller();
 
-async function lazyLoadBrowserBundle(page: Page) {
-  if (
-    await page.evaluate(() => typeof window.happoTakeDOMSnapshot === 'undefined')
-  ) {
-    await page.addScriptTag({ path: pathToBrowserBuild });
-
-    // Add timeout check for happoTakeDOMSnapshot
-    try {
-      await page.waitForFunction(
-        () => typeof window.happoTakeDOMSnapshot !== 'undefined',
-        { timeout: 10000 },
-      );
-    } catch {
-      throw new Error('Timed out waiting for happoTakeDOMSnapshot to be defined');
-    }
-  }
-}
-
-export async function init(pageOrContext?: never) {
-  if (pageOrContext) {
-    console.warn(
-      '[HAPPO] You no longer need to pass a page or context to happoPlaywright.init()',
-    );
-  }
-
+test.beforeAll(async () => {
   await controller.init();
-}
+});
 
-export async function finish() {
+test.afterAll(async () => {
   await controller.finish();
-}
+});
+
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript({ path: pathToBrowserBuild });
+});
 
 export async function screenshot(
   page: Page,
@@ -72,8 +53,6 @@ export async function screenshot(
   if (!variant) {
     throw new Error('Missing `variant`');
   }
-
-  await lazyLoadBrowserBundle(page);
 
   const elementHandle =
     'elementHandle' in handleOrLocator
