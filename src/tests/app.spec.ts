@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import * as happoPlaywright from '..';
+import { expect } from '@playwright/test';
+import { test } from '..';
 
 function assertError(error: unknown): asserts error is Error {
   if (!(error instanceof Error)) {
@@ -9,7 +9,7 @@ function assertError(error: unknown): asserts error is Error {
   }
 }
 
-test('basic test', async ({ page }) => {
+test('basic test', async ({ page, happoScreenshot }) => {
   expect(process.env.HAPPO_API_KEY).toBeDefined();
   expect(process.env.HAPPO_API_SECRET).toBeDefined();
 
@@ -17,7 +17,7 @@ test('basic test', async ({ page }) => {
 
   const title = page.locator('h1');
 
-  await happoPlaywright.screenshot(page, title, {
+  await happoScreenshot(title, {
     component: 'Title',
     variant: 'default',
     targets: [
@@ -28,13 +28,13 @@ test('basic test', async ({ page }) => {
 
   const stretchToParent = page.locator('#stretch-to-parent');
 
-  await happoPlaywright.screenshot(page, stretchToParent, {
+  await happoScreenshot(stretchToParent, {
     component: 'StretchToParent',
     variant: 'snapshotStrategy hoist',
     snapshotStrategy: 'hoist',
   });
 
-  await happoPlaywright.screenshot(page, stretchToParent, {
+  await happoScreenshot(stretchToParent, {
     component: 'StretchToParent',
     variant: 'snapshotStrategy hoist',
     snapshotStrategy: 'clip',
@@ -44,7 +44,7 @@ test('basic test', async ({ page }) => {
 
   await expect(page.locator('text=Sad to see you go').first()).toBeVisible();
 
-  await happoPlaywright.screenshot(page, await page.$('h2'), {
+  await happoScreenshot(await page.$('h2'), {
     component: 'Title',
     variant: 'goodbye',
   });
@@ -54,8 +54,7 @@ test('basic test', async ({ page }) => {
     let caughtError;
 
     try {
-      await happoPlaywright.screenshot(
-        page,
+      await happoScreenshot(
         // @ts-expect-error Argument of type 'Promise<ElementHandleForTag<"h2"> | null>' is not assignable to parameter of type 'ElementHandle<Node> | Locator | null'.ts(2345)
         page.$('h2'),
         {
@@ -82,8 +81,7 @@ test('basic test', async ({ page }) => {
     let caughtError;
 
     try {
-      await happoPlaywright.screenshot(
-        page,
+      await happoScreenshot(
         await page.$('h2'),
         // @ts-expect-error Property 'component' is missing in type '{ variant: string; }'
         {
@@ -106,8 +104,7 @@ test('basic test', async ({ page }) => {
     // We expect an error about missing variant
     let caughtError;
     try {
-      await happoPlaywright.screenshot(
-        page,
+      await happoScreenshot(
         await page.$('h2'),
         // @ts-expect-error Property 'variant' is missing in type '{ component: string; }'
         {

@@ -1,48 +1,10 @@
-import React, { useEffect, useRef } from 'react';
-
-function CanvasImage({ responsive }: { responsive?: boolean }) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    if (!canvasRef.current) {
-      return;
-    }
-
-    const ctx = canvasRef.current.getContext('2d');
-
-    if (!ctx) {
-      return;
-    }
-
-    ctx.moveTo(0, 0);
-    ctx.lineTo(200, 100);
-    ctx.stroke();
-    ctx.font = '30px Arial';
-    ctx.rotate(0.25);
-    ctx.fillText('I am a canvas', 20, 50);
-  });
-
-  return (
-    <canvas
-      className="canvas"
-      data-test="untainted-canvas"
-      style={{
-        padding: 20,
-        width: responsive ? 'calc(100% - 40px)' : undefined,
-      }}
-      ref={canvasRef}
-      width={responsive ? undefined : '200'}
-      height={responsive ? undefined : '100'}
-    />
-  );
-}
+import React from 'react';
 
 export default function IndexPage() {
   return (
     <main>
       <h1>Hello world</h1>
       <a href="/goodbye">goodbye</a>
-      <CanvasImage />
 
       <div style={{ width: 200 }}>
         I am 200px wide.
