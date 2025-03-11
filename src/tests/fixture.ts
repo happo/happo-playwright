@@ -1,4 +1,13 @@
-import { test as base } from '@playwright/test';
+/* eslint-disable no-empty-pattern */
+import { test as base, mergeTests } from '@playwright/test';
+import { test as happoTest } from '..';
 
 // Empty fixture to allow importing the fixture in other files
-export const test = base.extend({});
+const baseTest = base.extend({
+  double: async ({}, use) => {
+    await use((number: number) => number * 2);
+  },
+});
+
+export const test = mergeTests(baseTest, happoTest);
+export { expect } from '@playwright/test';
