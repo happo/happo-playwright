@@ -1,6 +1,6 @@
 {
   "name": "happo-playwright",
-  "version": "4.0.0-beta.0",
+  "version": "4.0.1",
   "description": "Happo integration for Playwright end-to-end tests",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
