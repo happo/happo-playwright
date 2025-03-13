@@ -17,6 +17,7 @@ updates:
           - '*-eslint'
           - 'eslint-*'
           - '@eslint/*'
+          - 'globals'
       react:
         patterns:
           - 'react'
