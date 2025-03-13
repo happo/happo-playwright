@@ -1,11 +1,11 @@
-.eslintrc.js
+**/tests
 .github
 .happo.js
 .next
 .node-version
+eslint.config.*
 node_modules
 pages
 test-results
-tests/*
+tests
 yarn-error.log
-
