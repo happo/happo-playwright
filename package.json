@@ -11,7 +11,7 @@
     "lint": "eslint .",
     "dev": "next --port 7676",
     "test": "happo-e2e -- playwright test",
-    "prepare": "npx tsc --noEmit false"
+    "prepublishOnly": "npx tsc --noEmit false"
   },
   "prettier": {
     "printWidth": 85,
