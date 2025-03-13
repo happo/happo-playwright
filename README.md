@@ -30,28 +30,60 @@ module.exports = {
 
 ## Spec file setup
 
-Here's an example spec file. It takes a screenshot of a Hero image on an
-imaginary page. To make the whole flow work, it's important that you call `init`
-and `finish`. In this example, we're using a `beforeEach` hook for
-initialization and an `afterEach` hook to finish the happo session.
+Below is an example Playwright spec file. It takes a screenshot of a Hero image
+on an imaginary page.
 
 ```js
-const happoPlaywright = require('happo-playwright');
+// tests/test.spec.js
+import { test } from 'happo-playwright';
 
-test.beforeEach(async ({ context }) => {
-  await happoPlaywright.init(context);
-});
-
-test.afterEach(async () => {
-  await happoPlaywright.finish();
-});
-
-test('start page', async ({ page }) => {
+test('start page', async ({ page, happoScreenshot }) => {
   await page.goto('http://localhost:7676');
 
   const heroImage = page.locator('.hero-image');
 
-  await happoPlaywright.screenshot(page, heroImage, {
+  await happoScreenshot(heroImage, {
+    component: 'Hero Image',
+    variant: 'default',
+  });
+});
+```
+
+### With Playwright fixtures
+
+If you're using
+[Playwright fixtures](https://playwright.dev/docs/test-fixtures), you can mix
+happo-playwright in with
+[`mergeTests`](https://playwright.dev/docs/test-fixtures#combine-custom-fixtures-from-multiple-modules).
+
+Here's an example of how to do this:
+
+```js
+// tests/test.js
+import { test as happoTest } from 'happo-playwright';
+import { test as base, mergeTests } from '@playwright/test';
+
+const baseTest = base.extend({
+  myFixture: async ({}, use) => {
+    await use('my fixture value');
+  },
+});
+
+export const test = mergeTests(baseTest, happoTest);
+```
+
+Then in your Playwright test file, you can use the `test` function as usual:
+
+```js
+// tests/test.spec.js
+import { test } from './test';
+
+test('start page', async ({ page, happoScreenshot }) => {
+  await page.goto('http://localhost:7676');
+
+  const heroImage = page.locator('.hero-image');
+
+  await happoScreenshot(heroImage, {
     component: 'Hero Image',
     variant: 'default',
   });
