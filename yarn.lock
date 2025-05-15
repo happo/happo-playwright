@@ -1385,9 +1385,9 @@ happo-e2e@^4.1.0:
     yargs "^17.7.2"
 
 happo.io@^12.0.0, happo.io@^12.1.0:
-  version "12.4.0"
-  resolved "https://registry.yarnpkg.com/happo.io/-/happo.io-12.4.0.tgz#ad11f2d73d7b1f4d0e03f1689449ff41810164b4"
-  integrity sha512-8ya/g5S9CeWAGQ/bDoRhOZD3ltG5PZ2bup7dGDFiI7pIYZPWpcQfkbaPplqaKay7P2SGuYANbcObuF5BFCYmig==
+  version "12.4.2"
+  resolved "https://registry.yarnpkg.com/happo.io/-/happo.io-12.4.2.tgz#e4eb7b46602a13f36dd4759a62bdfb9601ead105"
+  integrity sha512-qy/zUp2dC+gTbu/2iSWc0pBJ23xb9ElSZNNPKjZplsnaHEff2EfrtYooiMLwYdMUIrd8Tvx376qy+wTfbwU3zQ==
   dependencies:
     "@babel/preset-react" "^7.12.1"
     archiver "^7.0.1"
