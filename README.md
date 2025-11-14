@@ -1,5 +1,17 @@
 # happo-playwright
 
+> **⚠️ Notice:** This package has been merged into the
+> [`happo`](https://github.com/happo/happo) package. Please install `happo`
+> instead:
+>
+> ```bash
+> npm install --save-dev happo
+> ```
+>
+> [Migration guide](https://docs.happo.io/docs/migrating-from-legacy-packages)
+
+---
+
 This library can be used together with
 [Playwright](https://playwright.dev/docs/intro) to get Happo screenshots
 integrated with integration/end-to-end tests.
