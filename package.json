@@ -21,11 +21,11 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.0",
-    "@eslint/js": "^9.22.0",
+    "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.46.0",
     "@types/node": "^22.11.0",
     "@types/react": "^17.0.0",
-    "eslint": "^9.22.0",
+    "eslint": "^10.0.0",
     "globals": "^17.0.0",
     "happo-e2e": "^5.0.0",
     "happo.io": "^13.0.0",
